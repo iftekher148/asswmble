@@ -1,0 +1,854 @@
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-1
+
+
+				;*****************************************
+				;     MDA-Win8086 EXPERIMENT PROGRAM    *
+				;     FILENAME  : MATRIX_3.ASM
+				;     PROCESSOR : I8086
+				;     DOT MATRIX TEST
+				;*****************************************
+ 0000				CODE	SEGMENT
+					ASSUME	CS:CODE,DS:CODE,ES:CODE,SS:CODE
+					;
+ = 001E				PPIC_C	EQU	1EH ; control register
+ = 001C				PPIC	EQU	1CH
+ = 001A				PPIB	EQU	1AH
+ = 0018				PPIA	EQU	18H
+					;	
+ 1000					ORG	1000H
+ 1000  B0 80				MOV	AL,80H
+ 1002  E6 1E				OUT	PPIC_C,AL
+					;
+ 1004  B0 FF				MOV	AL, 0FFH
+ 1006  E6 18				OUT	PPIA,AL
+					;
+ 1008  BE 1040 R		L1:	MOV	SI,OFFSET FONT1
+					;
+ 100B  B3 40				MOV	BL,64 ; font No.
+ 100D  B7 0A			L3:	MOV	BH,10 ; display time
+					;
+ 100F  56			L2:	PUSH	SI
+ 1010  E8 1021 R			CALL	SCAN
+ 1013  5E				POP	SI
+ 1014  FE CF				DEC	BH
+ 1016  75 F7				JNZ	L2
+					;
+ 1018  83 C6 08				ADD	SI,8
+ 101B  FE CB				DEC	BL
+ 101D  75 EE				JNZ	L3
+				        ;
+ 101F  EB E7				JMP	L1
+					;
+					;	
+					;
+ 1021				SCAN    PROC	NEAR
+ 1021  B4 01				MOV	AH,00000001B
+ 1023  2E: 8A 04		SCAN1:	MOV	AL,BYTE PTR CS:[SI]
+ 1026  E6 1A				OUT	PPIB,AL
+					;		
+ 1028  8A C4				MOV	AL,AH
+ 102A  E6 1C				OUT	PPIC,AL
+ 102C  E8 1036 R			CALL	TIMER
+ 102F  46				INC	SI
+ 1030  F8				CLC
+ 1031  D0 C4				ROL	AH,1
+ 1033  73 EE				JNC	SCAN1
+ 1035  C3				RET
+ 1036				SCAN	ENDP
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-2
+
+
+					;
+ 1036  B9 01F4			TIMER:	MOV	CX,500
+ 1039  90			TIMER1:	NOP
+ 103A  90				NOP
+ 103B  90				NOP
+ 103C  90				NOP
+ 103D  E2 FA				LOOP	TIMER1
+ 103F  C3				RET
+					;
+				
+				
+ 1040  FF			FONT1:  DB      11111111B
+ 1041  FF			        DB      11111111B
+ 1042  FF				DB	11111111B
+ 1043  FF				DB	11111111B
+ 1044  FF				DB	11111111B
+ 1045  FF				DB	11111111B
+ 1046  FF				DB	11111111B
+ 1047  FF				DB	11111111B
+					;
+ 1048  FF			FONT2:  DB      11111111B
+ 1049  FF			        DB      11111111B
+ 104A  FF			        DB      11111111B
+ 104B  FF				DB	11111111B
+ 104C  FF				DB	11111111B
+ 104D  FF				DB	11111111B
+ 104E  FF				DB	11111111B
+ 104F  C3				DB	11000011B
+					
+ 1050  FF			FONT3:  DB      11111111B
+ 1051  FF			        DB      11111111B
+ 1052  FF				DB	11111111B
+ 1053  FF				DB	11111111B
+ 1054  FF				DB	11111111B
+ 1055  FF				DB	11111111B
+ 1056  C3				DB	11000011B
+ 1057  BD				DB      10111101B
+					
+ 1058  FF			FONT4:  DB      11111111B
+ 1059  FF				DB	11111111B
+ 105A  FF				DB	11111111B
+ 105B  FF				DB	11111111B
+ 105C  FF				DB	11111111B
+ 105D  C3				DB	11000011B
+ 105E  BD				DB      10111101B
+ 105F  7E				DB      01111110B
+				
+ 1060  FF			FONT5: 	DB	11111111B
+ 1061  FF				DB	11111111B
+ 1062  FF				DB	11111111B
+ 1063  FF				DB	11111111B
+ 1064  C3				DB	11000011B
+ 1065  BD				DB      10111101B
+ 1066  7E				DB      01111110B
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-3
+
+
+ 1067  7E				DB	01111110B
+				
+ 1068  FF			FONT6:  DB	11111111B
+ 1069  FF				DB	11111111B
+ 106A  FF				DB	11111111B
+ 106B  C3				DB	11000011B
+ 106C  BD				DB      10111101B
+ 106D  7E				DB      01111110B
+ 106E  7E				DB	01111110B
+ 106F  7E				DB	01111110B
+				
+ 1070  FF			FONT7:  DB	11111111B
+ 1071  FF				DB	11111111B
+ 1072  C3				DB	11000011B
+ 1073  BD				DB      10111101B
+ 1074  7E				DB      01111110B
+ 1075  7E				DB	01111110B
+ 1076  7E				DB	01111110B
+ 1077  BD				DB	10111101B
+				
+ 1078  FF			FONT8:  DB	11111111B
+ 1079  C3				DB	11000011B
+ 107A  BD				DB      10111101B
+ 107B  7E				DB      01111110B
+ 107C  7E				DB	01111110B
+ 107D  7E				DB	01111110B
+ 107E  BD				DB	10111101B
+ 107F  FF				DB	11111111B
+				;
+ 1080				FONT9:
+ 1080  C3				DB	11000011B
+ 1081  BD				DB      10111101B
+ 1082  7E				DB      01111110B
+ 1083  7E				DB	01111110B
+ 1084  7E				DB	01111110B
+ 1085  BD				DB	10111101B
+ 1086  FF				DB	11111111B
+ 1087  FF				DB      11111111B   ;
+				
+ 1088				FONT10:
+ 1088  BD				DB      10111101B
+ 1089  7E				DB      01111110B
+ 108A  7E				DB	01111110B
+ 108B  7E				DB	01111110B
+ 108C  BD				DB	10111101B
+ 108D  FF				DB	11111111B
+ 108E  FF				DB      11111111B   ;S
+ 108F  0D			        DB      00001101B
+				
+ 1090				FONT11:
+ 1090  7E				DB      01111110B
+ 1091  7E				DB	01111110B
+ 1092  7E				DB	01111110B
+ 1093  BD				DB	10111101B
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-4
+
+
+ 1094  FF				DB	11111111B
+ 1095  FF				DB      11111111B   ;S
+ 1096  0D			        DB      00001101B
+ 1097  6D			        DB      01101101B
+				
+ 1098				FONT12:
+ 1098  7E				DB	01111110B
+ 1099  7E				DB	01111110B
+ 109A  BD				DB	10111101B
+ 109B  FF				DB	11111111B
+ 109C  FF				DB      11111111B   ;S
+ 109D  0D			        DB      00001101B
+ 109E  6D			        DB      01101101B
+ 109F  6D			        DB      01101101B
+				
+ 10A0				FONT13:
+ 10A0  7E				DB	01111110B
+ 10A1  BD				DB	10111101B
+ 10A2  FF				DB	11111111B
+ 10A3  FF				DB      11111111B   ;S
+ 10A4  0D			        DB      00001101B
+ 10A5  6D			        DB      01101101B
+ 10A6  6D			        DB      01101101B
+ 10A7  6D			        DB      01101101B
+				
+ 10A8				FONT14:
+ 10A8  BD				DB	10111101B
+ 10A9  FF				DB	11111111B
+ 10AA  FF				DB      11111111B   ;S
+ 10AB  0D			        DB      00001101B
+ 10AC  6D			        DB      01101101B
+ 10AD  6D			        DB      01101101B
+ 10AE  6D			        DB      01101101B
+ 10AF  6D			        DB      01101101B
+				
+ 10B0				FONT15:
+ 10B0  FF			        DB	11111111B
+ 10B1  FF				DB      11111111B   ;S
+ 10B2  0D			        DB      00001101B
+ 10B3  6D			        DB      01101101B
+ 10B4  6D			        DB      01101101B
+ 10B5  6D			        DB      01101101B
+ 10B6  6D			        DB      01101101B
+ 10B7  61			        DB      01100001B
+				
+ 10B8  FF			FONT16: DB      11111111B   ;S
+ 10B9  0D			        DB      00001101B
+ 10BA  6D			        DB      01101101B
+ 10BB  6D			        DB      01101101B
+ 10BC  6D			        DB      01101101B
+ 10BD  6D			        DB      01101101B
+ 10BE  61			        DB      01100001B
+ 10BF  FF			        DB      11111111B
+					;/////////////////////////////////////
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-5
+
+
+				
+ 10C0				FONT17:
+ 10C0  0D			        DB      00001101B
+ 10C1  6D			        DB      01101101B
+ 10C2  6D			        DB      01101101B
+ 10C3  6D			        DB      01101101B
+ 10C4  6D			        DB      01101101B
+ 10C5  61			        DB     01100001B
+ 10C6  FF			        DB     11111111B
+ 10C7  FF			        DB     11111111B   ;E
+				
+ 10C8				FONT18:
+ 10C8  6D			        DB      01101101B
+ 10C9  6D			        DB      01101101B
+ 10CA  6D			        DB      01101101B
+ 10CB  6D			        DB      01101101B
+ 10CC  61			        DB      01100001B
+ 10CD  FF			        DB      11111111B
+ 10CE  FF			        DB      11111111B    ;E
+ 10CF  01			        DB      00000001B
+				
+ 10D0				FONT19:
+ 10D0  6D			        DB      01101101B
+ 10D1  6D			        DB      01101101B
+ 10D2  6D			        DB      01101101B
+ 10D3  61			        DB      01100001B
+ 10D4  FF			        DB      11111111B
+ 10D5  FF			        DB      11111111B    ;E
+ 10D6  01			        DB      00000001B
+ 10D7  6D			        DB      01101101B
+				
+ 10D8				FONT20:
+ 10D8  6D			        DB      01101101B
+ 10D9  6D			        DB      01101101B
+ 10DA  61			        DB      01100001B
+ 10DB  FF			        DB      11111111B
+ 10DC  FF			        DB      11111111B    ;E
+ 10DD  01			        DB      00000001B
+ 10DE  6D			        DB      01101101B
+ 10DF  6D			        DB      01101101B
+				
+ 10E0				FONT21:
+ 10E0  6D			        DB      01101101B
+ 10E1  61			        DB      01100001B
+ 10E2  FF			        DB      11111111B
+ 10E3  FF			        DB      11111111B    ;E
+ 10E4  01			        DB      00000001B
+ 10E5  6D			        DB      01101101B
+ 10E6  6D			        DB      01101101B
+ 10E7  6D			        DB      01101101B
+				
+ 10E8				FONT22:
+ 10E8  61			        DB      01100001B
+ 10E9  FF			        DB      11111111B
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-6
+
+
+ 10EA  FF			        DB      11111111B    ;E
+ 10EB  01			        DB      00000001B
+ 10EC  6D			        DB      01101101B
+ 10ED  6D			        DB      01101101B
+ 10EE  6D			        DB      01101101B
+ 10EF  7D			        DB      01111101B
+				
+ 10F0				FONT23:
+ 10F0  FF			        DB      11111111B
+ 10F1  FF			        DB      11111111B    ;E
+ 10F2  01			        DB      00000001B
+ 10F3  6D			        DB      01101101B
+ 10F4  6D			        DB      01101101B
+ 10F5  6D			        DB      01101101B
+ 10F6  7D			        DB      01111101B
+ 10F7  7D			        DB      01111101B
+				
+				
+				
+ 10F8				 FONT24:
+ 10F8  FF			        DB      11111111B    ;E
+ 10F9  01			        DB      00000001B
+ 10FA  6D			        DB      01101101B
+ 10FB  6D			        DB      01101101B
+ 10FC  6D			        DB      01101101B
+ 10FD  7D			        DB      01111101B
+ 10FE  7D			        DB      01111101B
+ 10FF  FF			        DB      11111111B
+				
+ 1100				  FONT25:
+ 1100  01			        DB      00000001B
+ 1101  6D			        DB      01101101B
+ 1102  6D			        DB      01101101B
+ 1103  6D			        DB      01101101B
+ 1104  7D			        DB      01111101B
+ 1105  7D			        DB      01111101B
+ 1106  FF			        DB      11111111B
+ 1107  FF			        DB      11111111B
+				
+ 1108				  FONT26:
+				
+ 1108  6D			        DB      01101101B
+ 1109  6D			        DB      01101101B
+ 110A  6D			        DB      01101101B
+ 110B  7D			        DB      01111101B
+ 110C  7D			        DB      01111101B
+ 110D  FF			        DB      11111111B
+ 110E  FF			        DB      11111111B
+ 110F  BE			        DB      10111110B
+				
+ 1110				 FONT27:
+ 1110  6D			        DB      01101101B
+ 1111  6D			        DB      01101101B
+ 1112  7D			        DB      01111101B
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-7
+
+
+ 1113  7D			        DB      01111101B
+ 1114  FF			        DB      11111111B
+ 1115  FF			        DB      11111111B
+ 1116  BE			        DB      10111110B
+ 1117  00			        DB      00000000B
+				
+ 1118				  FONT28:
+ 1118  6D			        DB      01101101B
+ 1119  6D			        DB      01101101B
+ 111A  7D			        DB      01111101B
+ 111B  7D			        DB      01111101B   ;1
+ 111C  FF			        DB      11111111B
+ 111D  FF			        DB      11111111B
+ 111E  BE			        DB      10111110B
+ 111F  00			        DB      00000000B
+				
+ 1120				 FONT29:
+ 1120  6D			        DB      01101101B
+ 1121  7D			        DB      01111101B
+ 1122  7D			        DB      01111101B   ;1
+ 1123  FF			        DB      11111111B
+ 1124  FF			        DB      11111111B
+ 1125  BE			        DB      10111110B
+ 1126  00			        DB      00000000B
+ 1127  FE			        DB      11111110B
+				
+ 1128				  FONT30:
+ 1128  7D			        DB      01111101B
+ 1129  7D			        DB      01111101B   ;1
+ 112A  FF			        DB      11111111B
+ 112B  FF			        DB      11111111B
+ 112C  BE			        DB      10111110B
+ 112D  00			        DB      00000000B
+ 112E  FE			        DB      11111110B
+ 112F  FF			        DB      11111111B
+				
+ 1130				    FONT31:
+ 1130  7D			        DB      01111101B   ;1
+ 1131  FF			        DB      11111111B
+ 1132  FF			        DB      11111111B
+ 1133  BE			        DB      10111110B
+ 1134  00			        DB      00000000B
+ 1135  FE			        DB      11111110B
+ 1136  FF			        DB      11111111B
+				
+ 1137				   FONT32:
+ 1137  FF			        DB      11111111B
+ 1138  BE			        DB      10111110B
+ 1139  00			        DB      00000000B
+ 113A  FE			        DB      11111110B
+ 113B  FF			        DB      11111111B
+ 113C  FF			        DB      11111111B
+ 113D  9E			        DB      10011110B
+ 113E  FF			        DB      11111111B
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-8
+
+
+				
+ 113F				   FONT33:
+ 113F  FF			        DB      11111111B
+ 1140  00			        DB      00000000B     ;U
+ 1141  67			        DB      01100111B
+ 1142  6B			        DB      01101011B
+ 1143  6D			        DB      01101101B
+ 1144  9E			        DB      10011110B
+ 1145  FF			        DB      11111111B
+ 1146  FF			        DB      11111111B
+				
+ 1147				   FONT34:
+ 1147  00			        DB      00000000B     ;U
+ 1148  67			        DB      01100111B
+ 1149  6B			        DB      01101011B
+ 114A  6D			        DB      01101101B
+ 114B  9E			        DB      10011110B
+ 114C  FF			        DB      11111111B
+ 114D  FF			        DB      11111111B
+ 114E  03			        DB      00000011B
+				
+ 114F				  FONT35:
+ 114F  67			        DB      01100111B
+ 1150  6B			        DB      01101011B
+ 1151  6D			        DB      01101101B
+ 1152  9E			        DB      10011110B
+ 1153  FF			        DB      11111111B
+ 1154  FF			        DB      11111111B
+ 1155  03			        DB      00000011B
+ 1156  FD			        DB      11111101B
+				
+ 1157				   FONT36:
+ 1157  6B			        DB      01101011B
+ 1158  6D			        DB      01101101B
+ 1159  9E			        DB      10011110B
+ 115A  FF			        DB      11111111B
+ 115B  FF			        DB      11111111B
+ 115C  03			        DB      00000011B
+ 115D  FD			        DB      11111101B
+ 115E  FD			        DB      11111101B
+				
+ 115F				     FONT37:
+ 115F  6D			        DB      01101101B
+ 1160  9E			        DB      10011110B
+ 1161  FF			        DB      11111111B
+ 1162  FF			        DB      11111111B
+ 1163  03			        DB      00000011B
+ 1164  FD			        DB      11111101B
+ 1165  FD			        DB      11111101B
+ 1166  FD			        DB      11111101B
+				
+				
+ 1167				   FONT38:
+ 1167  9E			        DB      10011110B
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-9
+
+
+ 1168  FF			        DB      11111111B
+ 1169  FF			        DB      11111111B
+ 116A  03			        DB      00000011B
+ 116B  FD			        DB      11111101B
+ 116C  FD			        DB      11111101B
+ 116D  FD			        DB      11111101B
+ 116E  FD			        DB      11111101B
+				
+				
+ 116F				    FONT39:
+ 116F  FF			        DB      11111111B
+ 1170  FF			        DB      11111111B
+ 1171  03			        DB      00000011B
+ 1172  FD			        DB      11111101B
+ 1173  FD			        DB      11111101B
+ 1174  FD			        DB      11111101B
+ 1175  FD			        DB      11111101B
+ 1176  03			        DB      00000011B
+				
+ 1177				   FONT40:
+ 1177  FF			        DB      11111111B
+ 1178  03			        DB      00000011B
+ 1179  FD			        DB      11111101B
+ 117A  FD			        DB      11111101B
+ 117B  FD			        DB      11111101B
+ 117C  FD			        DB      11111101B
+ 117D  03			        DB      00000011B
+ 117E  FF			        DB      11111111B
+				
+				
+ 117F  FF			 FONT41:  DB      11111111B
+ 1180  FF			        DB      11111111B
+ 1181  FF				DB	11111111B
+ 1182  7F				DB	01111111B     ;C
+ 1183  7F			        DB      01111111B
+ 1184  7F				DB	01111111B
+ 1185  FF			        DB      11111111B
+ 1186  FF				DB	11111111B
+					;
+ 1187  FF			FONT42:  DB      11111111B
+ 1188  FF			        DB      11111111B
+ 1189  7F				DB	01111111B
+ 118A  BF				DB	10111111B
+ 118B  BF			        DB      10111111B
+ 118C  BF				DB	10111111B
+ 118D  7F			        DB      01111111B
+ 118E  FF				DB	11111111B
+					;
+ 118F  FF			FONT43:  DB      11111111B
+ 1190  7F			        DB      01111111B
+ 1191  BF				DB	10111111B
+ 1192  DF				DB	11011111B
+ 1193  DF			        DB      11011111B
+ 1194  DF				DB	11011111B
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-10
+
+
+ 1195  BF			        DB      10111111B
+ 1196  FF				DB	11111111B
+					;
+ 1197  FF			FONT44:  DB      11111111B
+ 1198  3F			        DB      00111111B
+ 1199  DF				DB	11011111B
+ 119A  EF				DB	11101111B
+ 119B  EF			        DB      11101111B
+ 119C  EF				DB	11101111B
+ 119D  DF			        DB      11011111B
+ 119E  FF				DB	11111111B
+					;
+ 119F  FF			FONT45:  DB      11111111B
+ 11A0  1F			        DB      00011111B
+ 11A1  EF				DB	11101111B
+ 11A2  F7				DB	11110111B
+ 11A3  F7			        DB      11110111B
+ 11A4  F7				DB	11110111B
+ 11A5  EF			        DB      11101111B
+ 11A6  FF				DB	11111111B
+					;
+ 11A7  FF			FONT46:  DB      11111111B
+ 11A8  0F			        DB      00001111B
+ 11A9  F7				DB	11110111B
+ 11AA  FB				DB	11111011B
+ 11AB  FB			        DB      11111011B
+ 11AC  FB				DB	11111011B
+ 11AD  F7			        DB      11110111B
+ 11AE  FF				DB	11111111B
+					;	
+ 11AF  FF			FONT47:  DB      11111111B
+ 11B0  87			        DB      10000111B
+ 11B1  7B				DB	01111011B
+ 11B2  FD				DB	11111101B
+ 11B3  FD			        DB      11111101B
+ 11B4  FD				DB	11111101B
+ 11B5  7B			        DB      01111011B
+ 11B6  FF				DB	11111111B
+					;
+ 11B7  FF			FONT48:  DB      11111111B
+ 11B8  C3			        DB      11000011B
+ 11B9  BD				DB	10111101B
+ 11BA  7E				DB	01111110B      ;C
+ 11BB  7E			        DB      01111110B
+ 11BC  7E				DB	01111110B
+ 11BD  BD			        DB      10111101B
+ 11BE  FF				DB	11111111B
+				         ;
+				
+ 11BF  FF			 FONT49: DB      11111111B
+ 11C0  E1			        DB      11100001B
+ 11C1  DE				DB	11011110B
+ 11C2  BF				DB	10111111B    ;S
+ 11C3  BF			        DB      10111111B
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-11
+
+
+ 11C4  BF				DB	10111111B
+ 11C5  DE			        DB      11011110B
+ 11C6  FF				DB	11111111B
+					
+ 11C7  FF			 FONT50:DB      11111111B
+ 11C8  70			        DB      01110000B
+ 11C9  6F				DB	01101111B
+ 11CA  5F				DB	01011111B
+ 11CB  5F			        DB      01011111B
+ 11CC  5F				DB	01011111B
+ 11CD  6F			        DB      01101111B
+ 11CE  FF				DB	11111111B
+				
+ 11CF  FF			FONT51: DB      11111111B
+ 11D0  B8			        DB      10111000B
+ 11D1  B7				DB	10110111B
+ 11D2  AF				DB	10101111B
+ 11D3  AF			        DB      10101111B
+ 11D4  AF				DB	10101111B
+ 11D5  37			        DB      00110111B
+ 11D6  FF				DB	11111111B
+					
+ 11D7  FF			FONT52: DB      11111111B
+ 11D8  DC			        DB      11011100B
+ 11D9  DB				DB	11011011B
+ 11DA  D7				DB	11010111B
+ 11DB  D7			        DB      11010111B
+ 11DC  D7				DB	11010111B
+ 11DD  1B			        DB      00011011B
+ 11DE  FF				DB	11111111B
+					
+					
+ 11DF  FF			FONT53: DB      11111111B
+ 11E0  6E			        DB      01101110B
+ 11E1  6D				DB	01101101B
+ 11E2  6B				DB	01101011B
+ 11E3  6B			        DB      01101011B
+ 11E4  6B				DB	01101011B
+ 11E5  0D			        DB      00001101B
+ 11E6  FF				DB	11111111B
+					
+					
+ 11E7  FF			FONT54: DB      11111111B
+ 11E8  37			        DB      00110111B
+ 11E9  B6				DB	10110110B
+ 11EA  B5				DB	10110101B
+ 11EB  B5			        DB      10110101B
+ 11EC  B5				DB	10110101B
+ 11ED  86			        DB      10000110B
+ 11EE  FF				DB	11111111B
+					
+					
+ 11EF  FF			FONT55: DB      11111111B
+ 11F0  1B			        DB      00011011B
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-12
+
+
+ 11F1  DB				DB	11011011B
+ 11F2  DA				DB	11011010B
+ 11F3  DA			        DB      11011010B
+ 11F4  DA				DB	11011010B
+ 11F5  C3			        DB      11000011B
+ 11F6  FF				DB	11111111B
+					
+					
+ 11F7  FF			FONT56: DB      11111111B
+ 11F8  0D			        DB      00001101B
+ 11F9  6D				DB	01101101B
+ 11FA  6D				DB	01101101B
+ 11FB  6D			        DB      01101101B
+ 11FC  6D				DB	01101101B
+ 11FD  61			        DB      01100001B
+ 11FE  FF				DB	11111111B
+					
+ 11FF  FF			 FONT57:DB      11111111B
+ 1200  86			        DB      10000110B        ;E
+ 1201  B6				DB	10110110B
+ 1202  B6				DB	10110110B
+ 1203  B6			        DB      10110110B
+ 1204  B6				DB	10110110B
+ 1205  B0			        DB      10110000B
+ 1206  FF				DB	11111111B
+					
+ 1207  FF			 FONT58:DB      11111111B
+ 1208  43			        DB      01000011B
+ 1209  5B				DB	01011011B
+ 120A  5B				DB	01011011B
+ 120B  5B			        DB      01011011B
+ 120C  5B				DB	01011011B
+ 120D  58			        DB      01011000B
+ 120E  FF				DB	11111111B
+				
+ 120F  FF			 FONT59:DB      11111111B
+ 1210  21			        DB      00100001B
+ 1211  AD				DB	10101101B
+ 1212  AD				DB	10101101B
+ 1213  AD			        DB      10101101B
+ 1214  AD				DB	10101101B
+ 1215  AC			        DB      10101100B
+ 1216  FF				DB	11111111B
+				
+				
+ 1217  FF			 FONT60:DB      11111111B
+ 1218  10			        DB      00010000B
+ 1219  D6				DB	11010110B
+ 121A  D6				DB	11010110B
+ 121B  D6			        DB      11010110B
+ 121C  D6				DB	11010110B
+ 121D  D6			        DB      11010110B
+ 121E  FF				DB	11111111B
+				
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Page     1-13
+
+
+ 121F  FF			 FONT61:DB      11111111B
+ 1220  08			        DB      00001000B
+ 1221  6B				DB	01101011B
+ 1222  6B				DB	01101011B
+ 1223  6B			        DB      01101011B
+ 1224  6B				DB	01101011B
+ 1225  EB			        DB      11101011B
+ 1226  FF				DB	11111111B
+				
+ 1227  FF			  FONT62:DB     11111111B
+ 1228  04			        DB      00000100B
+ 1229  B5				DB	10110101B
+ 122A  B5				DB	10110101B
+ 122B  B5			        DB      10110101B
+ 122C  B5				DB	10110101B
+ 122D  F5			        DB      11110101B
+ 122E  FF				DB	11111111B
+				
+ 122F  FF			 FONT63:DB      11111111B
+ 1230  02			        DB      00000010B
+ 1231  DA				DB	11011010B
+ 1232  DA				DB	11011010B
+ 1233  DA			        DB      11011010B
+ 1234  DA				DB	11011010B
+ 1235  FA			        DB      11111010B
+ 1236  FF				DB	11111111B
+				
+ 1237  FF			 FONT64:DB      11111111B
+ 1238  01			        DB      00000001B
+ 1239  6D				DB	01101101B
+ 123A  6D				DB	01101101B
+ 123B  6D			        DB      01101101B
+ 123C  6D				DB	01101101B
+ 123D  7D			        DB      01111101B
+ 123E  FF				DB	11111111B                   
+					
+				  	
+				
+				        ;
+				
+					
+ 123F				CODE	ENDS
+					END
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+CODE . . . . . . . . . . . . . .  	123F	PARA	NONE	
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+FONT1  . . . . . . . . . . . . .  	L NEAR	1040	CODE
+FONT10 . . . . . . . . . . . . .  	L NEAR	1088	CODE
+FONT11 . . . . . . . . . . . . .  	L NEAR	1090	CODE
+FONT12 . . . . . . . . . . . . .  	L NEAR	1098	CODE
+FONT13 . . . . . . . . . . . . .  	L NEAR	10A0	CODE
+FONT14 . . . . . . . . . . . . .  	L NEAR	10A8	CODE
+FONT15 . . . . . . . . . . . . .  	L NEAR	10B0	CODE
+FONT16 . . . . . . . . . . . . .  	L NEAR	10B8	CODE
+FONT17 . . . . . . . . . . . . .  	L NEAR	10C0	CODE
+FONT18 . . . . . . . . . . . . .  	L NEAR	10C8	CODE
+FONT19 . . . . . . . . . . . . .  	L NEAR	10D0	CODE
+FONT2  . . . . . . . . . . . . .  	L NEAR	1048	CODE
+FONT20 . . . . . . . . . . . . .  	L NEAR	10D8	CODE
+FONT21 . . . . . . . . . . . . .  	L NEAR	10E0	CODE
+FONT22 . . . . . . . . . . . . .  	L NEAR	10E8	CODE
+FONT23 . . . . . . . . . . . . .  	L NEAR	10F0	CODE
+FONT24 . . . . . . . . . . . . .  	L NEAR	10F8	CODE
+FONT25 . . . . . . . . . . . . .  	L NEAR	1100	CODE
+FONT26 . . . . . . . . . . . . .  	L NEAR	1108	CODE
+FONT27 . . . . . . . . . . . . .  	L NEAR	1110	CODE
+FONT28 . . . . . . . . . . . . .  	L NEAR	1118	CODE
+FONT29 . . . . . . . . . . . . .  	L NEAR	1120	CODE
+FONT3  . . . . . . . . . . . . .  	L NEAR	1050	CODE
+FONT30 . . . . . . . . . . . . .  	L NEAR	1128	CODE
+FONT31 . . . . . . . . . . . . .  	L NEAR	1130	CODE
+FONT32 . . . . . . . . . . . . .  	L NEAR	1137	CODE
+FONT33 . . . . . . . . . . . . .  	L NEAR	113F	CODE
+FONT34 . . . . . . . . . . . . .  	L NEAR	1147	CODE
+FONT35 . . . . . . . . . . . . .  	L NEAR	114F	CODE
+FONT36 . . . . . . . . . . . . .  	L NEAR	1157	CODE
+FONT37 . . . . . . . . . . . . .  	L NEAR	115F	CODE
+FONT38 . . . . . . . . . . . . .  	L NEAR	1167	CODE
+FONT39 . . . . . . . . . . . . .  	L NEAR	116F	CODE
+FONT4  . . . . . . . . . . . . .  	L NEAR	1058	CODE
+FONT40 . . . . . . . . . . . . .  	L NEAR	1177	CODE
+FONT41 . . . . . . . . . . . . .  	L NEAR	117F	CODE
+FONT42 . . . . . . . . . . . . .  	L NEAR	1187	CODE
+FONT43 . . . . . . . . . . . . .  	L NEAR	118F	CODE
+FONT44 . . . . . . . . . . . . .  	L NEAR	1197	CODE
+FONT45 . . . . . . . . . . . . .  	L NEAR	119F	CODE
+FONT46 . . . . . . . . . . . . .  	L NEAR	11A7	CODE
+FONT47 . . . . . . . . . . . . .  	L NEAR	11AF	CODE
+FONT48 . . . . . . . . . . . . .  	L NEAR	11B7	CODE
+FONT49 . . . . . . . . . . . . .  	L NEAR	11BF	CODE
+Microsoft (R) Macro Assembler Version 5.10                  1/1/2
+                                                             Symbols-2
+
+
+FONT5  . . . . . . . . . . . . .  	L NEAR	1060	CODE
+FONT50 . . . . . . . . . . . . .  	L NEAR	11C7	CODE
+FONT51 . . . . . . . . . . . . .  	L NEAR	11CF	CODE
+FONT52 . . . . . . . . . . . . .  	L NEAR	11D7	CODE
+FONT53 . . . . . . . . . . . . .  	L NEAR	11DF	CODE
+FONT54 . . . . . . . . . . . . .  	L NEAR	11E7	CODE
+FONT55 . . . . . . . . . . . . .  	L NEAR	11EF	CODE
+FONT56 . . . . . . . . . . . . .  	L NEAR	11F7	CODE
+FONT57 . . . . . . . . . . . . .  	L NEAR	11FF	CODE
+FONT58 . . . . . . . . . . . . .  	L NEAR	1207	CODE
+FONT59 . . . . . . . . . . . . .  	L NEAR	120F	CODE
+FONT6  . . . . . . . . . . . . .  	L NEAR	1068	CODE
+FONT60 . . . . . . . . . . . . .  	L NEAR	1217	CODE
+FONT61 . . . . . . . . . . . . .  	L NEAR	121F	CODE
+FONT62 . . . . . . . . . . . . .  	L NEAR	1227	CODE
+FONT63 . . . . . . . . . . . . .  	L NEAR	122F	CODE
+FONT64 . . . . . . . . . . . . .  	L NEAR	1237	CODE
+FONT7  . . . . . . . . . . . . .  	L NEAR	1070	CODE
+FONT8  . . . . . . . . . . . . .  	L NEAR	1078	CODE
+FONT9  . . . . . . . . . . . . .  	L NEAR	1080	CODE
+
+L1 . . . . . . . . . . . . . . .  	L NEAR	1008	CODE
+L2 . . . . . . . . . . . . . . .  	L NEAR	100F	CODE
+L3 . . . . . . . . . . . . . . .  	L NEAR	100D	CODE
+
+PPIA . . . . . . . . . . . . . .  	NUMBER	0018	
+PPIB . . . . . . . . . . . . . .  	NUMBER	001A	
+PPIC . . . . . . . . . . . . . .  	NUMBER	001C	
+PPIC_C . . . . . . . . . . . . .  	NUMBER	001E	
+
+SCAN . . . . . . . . . . . . . .  	N PROC	1021	CODE	Length = 0015
+SCAN1  . . . . . . . . . . . . .  	L NEAR	1023	CODE
+
+TIMER  . . . . . . . . . . . . .  	L NEAR	1036	CODE
+TIMER1 . . . . . . . . . . . . .  	L NEAR	1039	CODE
+
+@CPU . . . . . . . . . . . . . .  	TEXT  0101h		
+@FILENAME  . . . . . . . . . . .  	TEXT  cse_15		
+@VERSION . . . . . . . . . . . .  	TEXT  510		
+
+
+    690 Source  Lines
+    690 Total   Lines
+     81 Symbols
+
+  46992 + 426812 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

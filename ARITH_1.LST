@@ -1,0 +1,79 @@
+Microsoft (R) Macro Assembler Version 5.10                  6/3/9
+                                                             Page     1-1
+
+
+				;*****************************************
+				;     MDA-Win8086 EXPERIMENT PROGRAM    *
+				;     FILENAME  : ARITH_1.ASM
+				;     PROCESSOR : I8086
+				;*****************************************
+ 0000				CODE	SEGMENT
+					ASSUME	CS:CODE,DS:CODE,ES:CODE,SS:CODE
+					; 43 + 65 = BX
+ 0000  B0 06				MOV	AL,6
+ 0002  04 05				ADD	AL,5
+ 0004  37				AAA
+ 0005  8A D8				MOV	BL,AL
+ 0007  B0 04				MOV	AL,4
+ 0009  14 03				ADC	AL,3
+ 000B  37				AAA
+ 000C  8A F8				MOV	BH,AL
+					; 83-14 = CX
+ 000E  B0 03				MOV	AL,3
+ 0010  2C 04				SUB	AL,4
+ 0012  3F				AAS
+ 0013  8A C8				MOV	CL,AL
+ 0015  B0 08				MOV	AL,8
+ 0017  1C 01				SBB	AL,1
+ 0019  3F				AAS
+ 001A  8A E8				MOV	CH,AL
+					; 58+15
+ 001C  B0 58				MOV	AL,58H
+ 001E  04 15				ADD	AL,15H
+ 0020  27				DAA
+					; 51-13
+ 0021  B0 51				MOV	AL,51H
+ 0023  2C 13				SUB	AL,13H
+ 0025  2F				DAS
+					; 4 x 3
+ 0026  B3 04				MOV	BL,4
+ 0028  B0 03				MOV	AL,3
+ 002A  F6 E3				MUL	BL
+ 002C  D4 0A				AAM
+					; 14/4
+ 002E  B8 0104				MOV	AX,0104H
+ 0031  B3 04				MOV	BL,4
+ 0033  D5 0A				AAD
+ 0035  F6 F3				DIV	BL
+					;
+ 0037  CC				INT	3
+					;
+ 0038				CODE	ENDS
+					END
+Microsoft (R) Macro Assembler Version 5.10                  6/3/9
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+CODE . . . . . . . . . . . . . .  	0038	PARA	NONE	
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+@CPU . . . . . . . . . . . . . .  	TEXT  0101h		
+@FILENAME  . . . . . . . . . . .  	TEXT  ARITH_1		
+@VERSION . . . . . . . . . . . .  	TEXT  510		
+
+
+     48 Source  Lines
+     48 Total   Lines
+      6 Symbols
+
+  46930 + 388362 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

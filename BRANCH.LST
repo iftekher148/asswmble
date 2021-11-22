@@ -1,0 +1,84 @@
+Microsoft (R) Macro Assembler Version 5.10                  6/3/9
+                                                             Page     1-1
+
+
+				;*****************************************
+				;     MDA-Win8086 EXPERIMENT PROGRAM    *
+				;     FILENAME  : BRANCH.ASM
+				;     PROCESSOR : I8086
+				;*****************************************
+ 0000				CODE	SEGMENT
+					ASSUME	CS:CODE,DS:CODE,ES:CODE,SS:CODE
+ 0000  B0 78				MOV	AL,78H
+ 0002  B1 80				MOV	CL,80H
+ 0004  80 F9 00				CMP	CL,00H
+ 0007  72 03				JB	L1
+ 0009  7C 01				JL	L1
+ 000B  90				NOP
+					;
+ 000C  3A C1			L1:	CMP	AL,CL
+ 000E  7F 03				JG	L2
+ 0010  77 01				JA	L2
+ 0012  90				NOP
+					;
+ 0013  04 18			L2:	ADD	AL,18H
+ 0015  72 03				JC	L3
+ 0017  78 01				JS	L3
+ 0019  90				NOP
+					;
+ 001A  04 80			L3:	ADD	AL,80H
+ 001C  B0 00				MOV	AL,00H
+ 001E  74 03				JZ	L4
+ 0020  72 01				JC	L4
+ 0022  90				NOP
+					;
+ 0023  B0 FF			L4:	MOV	AL,0FFH
+ 0025  04 01				ADD	AL,01H
+ 0027  72 01				JC	L5
+ 0029  90				NOP
+					;
+ 002A  F8			L5:	CLC
+ 002B  B0 FF				MOV	AL,0FFH
+ 002D  FE C0				INC	AL
+ 002F  72 03				JC	L6
+ 0031  74 01				JE	L6
+ 0033  90				NOP
+					;
+ 0034  CC			L6:	INT	3
+					;
+ 0035				CODE	ENDS
+					END
+Microsoft (R) Macro Assembler Version 5.10                  6/3/9
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+CODE . . . . . . . . . . . . . .  	0035	PARA	NONE	
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+L1 . . . . . . . . . . . . . . .  	L NEAR	000C	CODE
+L2 . . . . . . . . . . . . . . .  	L NEAR	0013	CODE
+L3 . . . . . . . . . . . . . . .  	L NEAR	001A	CODE
+L4 . . . . . . . . . . . . . . .  	L NEAR	0023	CODE
+L5 . . . . . . . . . . . . . . .  	L NEAR	002A	CODE
+L6 . . . . . . . . . . . . . . .  	L NEAR	0034	CODE
+
+@CPU . . . . . . . . . . . . . .  	TEXT  0101h		
+@FILENAME  . . . . . . . . . . .  	TEXT  BRANCH		
+@VERSION . . . . . . . . . . . .  	TEXT  510		
+
+
+     46 Source  Lines
+     46 Total   Lines
+     12 Symbols
+
+  46930 + 388362 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

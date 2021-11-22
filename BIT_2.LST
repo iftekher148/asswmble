@@ -1,0 +1,62 @@
+Microsoft (R) Macro Assembler Version 5.10                  6/3/9
+                                                             Page     1-1
+
+
+				;*****************************************
+				;     MDA-Win8086 EXPERIMENT PROGRAM    *
+				;     FILENAME  : BIT_2.ASM
+				;     PROCESSOR : I8086
+				;*****************************************
+ 0000					CODE	SEGMENT
+					ASSUME	CS:CODE,DS:CODE,ES:CODE,SS:CODE
+ 1000					ORG	1000H
+ 1000  B8 0000				MOV	AX,0
+ 1003  8E D8				MOV	DS,AX
+					;
+ 1005  B3 6E				MOV	BL,01101110B
+ 1007  BE 2000				MOV	SI,2000H
+ 100A  B9 0008				MOV	CX,0008H
+					;
+ 100D  C6 04 30			NEXT:	MOV	BYTE PTR[SI],30H
+ 1010  F6 C3 01				TEST	BL,1
+ 1013  74 02				JZ	ZERO
+ 1015  FE 04				INC	BYTE PTR[SI]
+ 1017  46			ZERO:	INC	SI
+ 1018  D0 DB				RCR	BL,1	
+ 101A  E2 F1				LOOP	NEXT
+					;
+ 101C  CC				INT	3
+					;
+ 101D				CODE	ENDS
+					END
+Microsoft (R) Macro Assembler Version 5.10                  6/3/9
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+CODE . . . . . . . . . . . . . .  	101D	PARA	NONE	
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+NEXT . . . . . . . . . . . . . .  	L NEAR	100D	CODE
+
+ZERO . . . . . . . . . . . . . .  	L NEAR	1017	CODE
+
+@CPU . . . . . . . . . . . . . .  	TEXT  0101h		
+@FILENAME  . . . . . . . . . . .  	TEXT  BIT_2		
+@VERSION . . . . . . . . . . . .  	TEXT  510		
+
+
+     27 Source  Lines
+     27 Total   Lines
+      8 Symbols
+
+  46830 + 388462 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors
